@@ -1,7 +1,16 @@
 # ★ Pip's Cozy Dream Workshop ★
 > **A whimsical, interactive bedtime story experience built for HaX.baby — Baby's First Website Hackathon.**
 
+🌐 **Live Website:** [https://ha-x-baby-web-hackathon-pip-s-cozy.vercel.app/](https://ha-x-baby-web-hackathon-pip-s-cozy.vercel.app/)
+
 ✨ **Live at Midnight Nursery:** Meet Pip, the tiny skull baby dream engineer who crafts lullabies, nightlights, and soothing dreams for sleepy thoughts to land.
+
+---
+
+## 🌐 Live Demo & Deployment
+
+- **Production URL:** [https://ha-x-baby-web-hackathon-pip-s-cozy.vercel.app/](https://ha-x-baby-web-hackathon-pip-s-cozy.vercel.app/)
+- **Repository:** [https://github.com/vishalvivek14332-source/HaX.babyWeb-Hackathon](https://github.com/vishalvivek14332-source/HaX.babyWeb-Hackathon)
 
 ---
 
