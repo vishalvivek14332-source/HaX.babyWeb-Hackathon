@@ -33,6 +33,7 @@ export function Navigation({
     { id: 'story', label: 'Story', href: '#origin-story' },
     { id: 'gallery', label: 'Gallery', href: '#gallery' },
     { id: 'wishes', label: 'Wishes', href: '#guestbook' },
+    { id: 'auth', label: 'Dreamer Pass', href: '#auth' },
   ];
 
   // Track active section on scroll

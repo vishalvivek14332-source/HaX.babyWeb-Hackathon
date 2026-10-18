@@ -17,6 +17,7 @@ import { PipChatCompanion } from './components/PipChatCompanion';
 import { LullabyJukeboxModal } from './components/LullabyJukeboxModal';
 import { AuthModal } from './components/AuthModal';
 import { UserProfileModal } from './components/UserProfileModal';
+import { DreamerPassSection } from './components/DreamerPassSection';
 
 export default function App() {
   // 1. Dream Mode (Theme state: Cozy Daydream vs Midnight Dream)
@@ -137,7 +138,10 @@ export default function App() {
           {/* Section 5: Gallery Section */}
           <Gallery />
 
-          {/* Section 6: Live Dream Guestbook with Real Backend Ledger */}
+          {/* Section 6: Dreamer Pass Authentication (Sign In & Sign Up) */}
+          <DreamerPassSection />
+
+          {/* Section 7: Live Dream Guestbook with Real Backend Ledger */}
           <Guestbook />
         </main>
 
