@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { LullabyState } from '../../types';
 import { musicBox } from '../../utils/audio';
+import { DreamDeliveryMap } from './DreamDeliveryMap';
+import { FallingDreamsGame } from './FallingDreamsGame';
 
 interface CreationsSectionProps {
   lullabyState: LullabyState;
@@ -355,49 +357,22 @@ export function CreationsSection({ lullabyState, onToggleLullaby }: CreationsSec
           onClick={() => setActiveModal(null)}
         >
           <div
-            className="relative max-w-lg w-full p-6 sm:p-8 rounded-3xl bg-[#fff8f1] border-2 border-[#ecd3c1] shadow-2xl"
+            className="relative max-w-2xl w-full rounded-3xl bg-[#fff8f1] border-2 border-[#ecd3c1] shadow-2xl overflow-hidden"
             onClick={(e) => e.stopPropagation()}
           >
             <button
               onClick={() => setActiveModal(null)}
-              className="absolute top-4 right-4 w-8 h-8 rounded-full bg-[#fce7ed] text-[#a34063] font-bold flex items-center justify-center cursor-pointer"
+              className="absolute top-4 right-4 z-20 w-8 h-8 rounded-full bg-[#fce7ed] text-[#a34063] font-bold flex items-center justify-center cursor-pointer shadow-sm hover:scale-105"
             >
               ✕
             </button>
-            <div className="text-center mb-6">
-              <span className="text-3xl">📍</span>
-              <h3 className="font-editorial text-2xl font-black text-[#38201a] mt-1" style={{ fontFamily: "'Fraunces', serif" }}>
-                Midnight Delivery Route Map
-              </h3>
-              <p className="text-xs text-[#5a382e] font-semibold mt-1">Tap a waypoint to guide Pip's cloud cart!</p>
-            </div>
-            <div className="space-y-3 mb-6">
-              {routes.map((r, i) => (
-                <div
-                  key={i}
-                  onClick={() => setSelectedRoute(i)}
-                  className={`p-3.5 rounded-2xl border-2 transition-all cursor-pointer flex items-center gap-3 ${
-                    selectedRoute === i ? 'bg-[#fce7ed] border-[#a34063] shadow-xs' : 'bg-white border-[#ecd3c1]'
-                  }`}
-                >
-                  <span className={`w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold ${
-                    selectedRoute === i ? 'bg-[#a34063] text-white' : 'bg-[#fff0e5] text-[#38201a]'
-                  }`}>
-                    {i + 1}
-                  </span>
-                  <div>
-                    <h4 className="font-bold text-sm text-[#38201a]">{r.name}</h4>
-                    <p className="text-xs text-[#5a382e]">{r.desc}</p>
-                  </div>
-                </div>
-              ))}
-            </div>
+            <DreamDeliveryMap />
           </div>
         </div>
       )}
 
       {/* ============================================================== */}
-      {/* Interactive Modal 04: Rattle & Toys Playroom */}
+      {/* Interactive Modal 04: Rattle & Toys Playroom (Mini-Game) */}
       {/* ============================================================== */}
       {activeModal === 'toys' && (
         <div
@@ -407,45 +382,16 @@ export function CreationsSection({ lullabyState, onToggleLullaby }: CreationsSec
           onClick={() => setActiveModal(null)}
         >
           <div
-            className="relative max-w-lg w-full p-6 sm:p-8 rounded-3xl bg-[#fff8f1] border-2 border-[#ecd3c1] shadow-2xl text-center"
+            className="relative max-w-2xl w-full rounded-3xl bg-[#fff8f1] border-2 border-[#ecd3c1] shadow-2xl overflow-hidden"
             onClick={(e) => e.stopPropagation()}
           >
             <button
               onClick={() => setActiveModal(null)}
-              className="absolute top-4 right-4 w-8 h-8 rounded-full bg-[#fce7ed] text-[#a34063] font-bold flex items-center justify-center cursor-pointer"
+              className="absolute top-4 right-4 z-20 w-8 h-8 rounded-full bg-[#fce7ed] text-[#a34063] font-bold flex items-center justify-center cursor-pointer shadow-sm hover:scale-105"
             >
               ✕
             </button>
-            <div className="text-4xl mb-2">🎁</div>
-            <h3 className="font-editorial text-2xl font-black text-[#38201a] mb-2" style={{ fontFamily: "'Fraunces', serif" }}>
-              Pip's Bedtime Toybox
-            </h3>
-            <p className="text-sm text-[#5a382e] font-semibold mb-6" style={{ fontFamily: "'Quicksand', sans-serif" }}>
-              Tap each toy to hear sweet musical chimes!
-            </p>
-            <div className="grid grid-cols-2 gap-4 mb-6">
-              <button
-                onClick={() => handlePlayToy('rattle')}
-                className="p-5 rounded-2xl bg-white border-2 border-[#ecd3c1] hover:border-[#a34063] hover:scale-105 active:scale-95 transition-all cursor-pointer flex flex-col items-center gap-2 shadow-xs"
-              >
-                <span className="text-4xl">🌟</span>
-                <span className="font-bold text-sm text-[#38201a]">Star Rattle</span>
-                <span className="text-xs text-[#8b6154]">Shake for chimes</span>
-              </button>
-              <button
-                onClick={() => handlePlayToy('blocks')}
-                className="p-5 rounded-2xl bg-white border-2 border-[#ecd3c1] hover:border-[#a34063] hover:scale-105 active:scale-95 transition-all cursor-pointer flex flex-col items-center gap-2 shadow-xs"
-              >
-                <span className="text-4xl">🧱</span>
-                <span className="font-bold text-sm text-[#38201a]">Dream Blocks</span>
-                <span className="text-xs text-[#8b6154]">Tap to stack</span>
-              </button>
-            </div>
-            {toyFeedback && (
-              <div className="p-3 rounded-xl bg-[#fce7ed] text-[#a34063] text-sm font-bold animate-fade-in">
-                {toyFeedback}
-              </div>
-            )}
+            <FallingDreamsGame />
           </div>
         </div>
       )}

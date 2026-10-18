@@ -1,14 +1,20 @@
 import React from 'react';
 import { PipAnimationCanvas } from './Artwork/PipAnimationCanvas';
-import { LullabyState } from '../types';
+import { LullabyState, DreamMode } from '../types';
 
 interface HeroProps {
   lullabyState: LullabyState;
   onToggleLullaby: () => void;
   onEasterEggTrigger: () => void;
+  dreamMode?: DreamMode;
 }
 
-export function Hero({ lullabyState, onToggleLullaby, onEasterEggTrigger }: HeroProps) {
+export function Hero({
+  lullabyState,
+  onToggleLullaby,
+  onEasterEggTrigger,
+  dreamMode = 'day',
+}: HeroProps) {
   const handleExploreClick = (e: React.MouseEvent) => {
     e.preventDefault();
     const el = document.querySelector('#creations');
@@ -84,14 +90,26 @@ export function Hero({ lullabyState, onToggleLullaby, onEasterEggTrigger }: Hero
 
             {/* Inner Content */}
             <div className="flex flex-col items-start text-left px-2 sm:px-4 py-2">
-              {/* Eyebrow */}
-              <div
-                className="flex items-center gap-2 mb-4 text-xs sm:text-[13px] font-extrabold tracking-[0.14em] uppercase text-[#38201a] select-none"
-                style={{ fontFamily: "'Outfit', sans-serif" }}
-              >
-                <span className="text-[#a34063] text-sm">✦</span>
-                <span>JUNIOR DREAM ENGINEER AT MIDNIGHT NURSERY</span>
-                <span className="text-sm">🐾</span>
+              {/* Eyebrow & Character Mood Expression Badge */}
+              <div className="flex flex-wrap items-center gap-2 mb-3 select-none">
+                <div
+                  className="flex items-center gap-2 text-xs sm:text-[13px] font-extrabold tracking-[0.14em] uppercase text-[#38201a]"
+                  style={{ fontFamily: "'Outfit', sans-serif" }}
+                >
+                  <span className="text-[#a34063] text-sm">✦</span>
+                  <span>JUNIOR DREAM ENGINEER</span>
+                  <span className="text-sm">🐾</span>
+                </div>
+                <span
+                  className={`inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-bold border transition-colors ${
+                    dreamMode === 'night'
+                      ? 'bg-purple-100 text-purple-800 border-purple-200'
+                      : 'bg-amber-100 text-amber-800 border-amber-200'
+                  }`}
+                  style={{ fontFamily: "'Outfit', sans-serif" }}
+                >
+                  <span>{dreamMode === 'night' ? '🌙 Sleepy (Zzz)' : '⭐ Wide Awake'}</span>
+                </span>
               </div>
 
               {/* Headline: Good Dreams Start Small. with hand-drawn curl flourish */}

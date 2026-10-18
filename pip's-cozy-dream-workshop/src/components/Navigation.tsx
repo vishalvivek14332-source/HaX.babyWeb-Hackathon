@@ -26,6 +26,7 @@ export function Navigation({
     { id: 'creations', label: 'Creations', href: '#creations' },
     { id: 'story', label: 'Story', href: '#origin-story' },
     { id: 'gallery', label: 'Gallery', href: '#gallery' },
+    { id: 'wishes', label: 'Wishes', href: '#guestbook' },
   ];
 
   // Track active section on scroll

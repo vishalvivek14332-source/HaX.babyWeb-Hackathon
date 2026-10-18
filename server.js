@@ -23,7 +23,87 @@ const mimeTypes = {
 };
 
 const server = http.createServer((req, res) => {
-  let reqPath = decodeURI(req.url.split('?')[0]);
+  // Set CORS headers
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+
+  if (req.method === 'OPTIONS') {
+    res.writeHead(204);
+    res.end();
+    return;
+  }
+
+  const parsedUrl = new URL(req.url, `http://${req.headers.host || 'localhost'}`);
+  const pathname = parsedUrl.pathname;
+
+  // Real backend API: Live Dream Guestbook (/api/wishes)
+  if (pathname === '/api/wishes') {
+    const wishesFile = path.join(__dirname, 'wishes.json');
+
+    if (req.method === 'GET') {
+      fs.readFile(wishesFile, 'utf8', (err, data) => {
+        if (err) {
+          res.writeHead(200, { 'Content-Type': 'application/json' });
+          res.end(JSON.stringify([]));
+          return;
+        }
+        res.writeHead(200, { 'Content-Type': 'application/json' });
+        res.end(data);
+      });
+      return;
+    }
+
+    if (req.method === 'POST') {
+      let body = '';
+      req.on('data', chunk => {
+        body += chunk;
+        if (body.length > 1e6) req.destroy();
+      });
+      req.on('end', () => {
+        try {
+          const payload = JSON.parse(body || '{}');
+          if (!payload.name || !payload.message) {
+            res.writeHead(400, { 'Content-Type': 'application/json' });
+            res.end(JSON.stringify({ error: 'Name and message are required' }));
+            return;
+          }
+
+          const newWish = {
+            id: `wish-${Date.now()}-${Math.floor(Math.random() * 1000)}`,
+            name: String(payload.name).slice(0, 50),
+            message: String(payload.message).slice(0, 200),
+            seal: payload.seal || '⭐ Star Wish',
+            date: 'Just now in Midnight Ledger',
+            isLocalOnly: false
+          };
+
+          fs.readFile(wishesFile, 'utf8', (err, data) => {
+            let list = [];
+            try {
+              list = JSON.parse(data || '[]');
+            } catch {
+              list = [];
+            }
+            list.unshift(newWish);
+            // Cap at 100 recent wishes
+            if (list.length > 100) list = list.slice(0, 100);
+
+            fs.writeFile(wishesFile, JSON.stringify(list, null, 2), 'utf8', () => {
+              res.writeHead(201, { 'Content-Type': 'application/json' });
+              res.end(JSON.stringify({ success: true, entry: newWish, all: list }));
+            });
+          });
+        } catch (e) {
+          res.writeHead(400, { 'Content-Type': 'application/json' });
+          res.end(JSON.stringify({ error: 'Invalid JSON' }));
+        }
+      });
+      return;
+    }
+  }
+
+  let reqPath = decodeURI(pathname);
   if (reqPath === '/' || reqPath === '') reqPath = '/index.html';
 
   // Normalize path safely within current directory

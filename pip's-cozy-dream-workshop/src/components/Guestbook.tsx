@@ -25,21 +25,55 @@ export function Guestbook() {
   const [entries, setEntries] = useState<GuestbookEntry[]>(() => {
     try {
       const saved = localStorage.getItem('pip_guestbook_wishes');
-      if (saved) {
-        return JSON.parse(saved);
-      }
+      if (saved) return JSON.parse(saved);
     } catch {
       // Fallback
     }
     return INITIAL_WORKSHOP_LOGS;
   });
 
-  const [name, setName] = useState('');
+  const [name, setName] = useState(() => {
+    try {
+      return localStorage.getItem('pip_visitor_name') || '';
+    } catch {
+      return '';
+    }
+  });
   const [message, setMessage] = useState('');
   const [selectedSeal, setSelectedSeal] = useState('⭐ Star Wish');
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isBackendConnected, setIsBackendConnected] = useState(false);
+
+  // Fetch from real backend API on mount
+  useEffect(() => {
+    let isMounted = true;
+    fetch('/api/wishes')
+      .then((res) => {
+        if (!res.ok) throw new Error('API unavailable');
+        return res.json();
+      })
+      .then((data) => {
+        if (isMounted && Array.isArray(data) && data.length > 0) {
+          setEntries(data);
+          setIsBackendConnected(true);
+          try {
+            localStorage.setItem('pip_guestbook_wishes', JSON.stringify(data));
+          } catch {
+            // Ignore
+          }
+        }
+      })
+      .catch(() => {
+        // Fallback to local storage (e.g. static hosting)
+        setIsBackendConnected(false);
+      });
+
+    return () => {
+      isMounted = false;
+    };
+  }, []);
 
   useEffect(() => {
     try {
@@ -49,7 +83,7 @@ export function Guestbook() {
     }
   }, [entries]);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setErrorMessage(null);
     setSuccessMessage(null);
@@ -74,26 +108,55 @@ export function Guestbook() {
 
     setIsSubmitting(true);
 
-    setTimeout(() => {
-      const newEntry: GuestbookEntry = {
-        id: `wish-${Date.now()}`,
-        name: trimmedName,
-        message: trimmedMessage,
-        seal: selectedSeal,
-        date: 'Just now in local dream journal',
-        isLocalOnly: true,
-      };
+    // Save visitor name into memory
+    try {
+      localStorage.setItem('pip_visitor_name', trimmedName);
+    } catch {
+      // Ignore
+    }
 
-      setEntries((prev) => [newEntry, ...prev]);
-      setName('');
-      setMessage('');
-      setIsSubmitting(false);
-      setSuccessMessage('Your bedtime wish was saved safely in your local workshop journal! ✨');
+    try {
+      const res = await fetch('/api/wishes', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          name: trimmedName,
+          message: trimmedMessage,
+          seal: selectedSeal,
+        }),
+      });
 
-      setTimeout(() => {
-        setSuccessMessage(null);
-      }, 5000);
-    }, 400);
+      if (res.ok) {
+        const data = await res.json();
+        if (data.entry) {
+          setEntries((prev) => [data.entry, ...prev.filter((item) => item.id !== data.entry.id)]);
+          setIsBackendConnected(true);
+        }
+        setMessage('');
+        setIsSubmitting(false);
+        setSuccessMessage('Your wish was delivered live to Pip\'s Midnight Nursery ledger! ⭐');
+        setTimeout(() => setSuccessMessage(null), 5000);
+        return;
+      }
+    } catch {
+      // Fallback local save
+    }
+
+    // Local fallback if backend unavailable
+    const newEntry: GuestbookEntry = {
+      id: `wish-${Date.now()}`,
+      name: trimmedName,
+      message: trimmedMessage,
+      seal: selectedSeal,
+      date: 'Just now in local dream journal',
+      isLocalOnly: true,
+    };
+
+    setEntries((prev) => [newEntry, ...prev]);
+    setMessage('');
+    setIsSubmitting(false);
+    setSuccessMessage('Your bedtime wish was saved safely in your dream journal! ✨');
+    setTimeout(() => setSuccessMessage(null), 5000);
   };
 
   const handleClearLocalWishes = () => {
@@ -133,11 +196,21 @@ export function Guestbook() {
           {/* Left Column: Form */}
           <div className="lg:col-span-5">
             <div className="rounded-3xl bg-[var(--bg-surface)] border border-[var(--border-subtle)] p-6 sm:p-8 shadow-xs">
-              <h3 className="font-editorial text-xl font-bold text-[var(--text-main)] mb-2">
-                Inscribe Your Wish
-              </h3>
+              <div className="flex items-center gap-2 mb-2">
+                <h3 className="font-editorial text-xl font-bold text-[var(--text-main)]">
+                  Inscribe Your Wish
+                </h3>
+                <span className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold ${
+                  isBackendConnected
+                    ? 'bg-emerald-100 text-emerald-700 dark:bg-emerald-950/60 dark:text-emerald-300'
+                    : 'bg-amber-100 text-amber-700 dark:bg-amber-950/60 dark:text-amber-300'
+                }`}>
+                  <span className={`w-1.5 h-1.5 rounded-full ${isBackendConnected ? 'bg-emerald-500 animate-pulse' : 'bg-amber-500'}`}></span>
+                  <span>{isBackendConnected ? 'Live Ledger' : 'Local Journal'}</span>
+                </span>
+              </div>
               <p className="text-xs text-[var(--text-muted)] leading-relaxed mb-6">
-                Wishes are saved privately in your browser’s local storage so you can review them whenever you visit Pip.
+                Wishes are synchronized with Pip's Midnight Nursery ledger and preserved in your bedtime journal.
               </p>
 
               <form onSubmit={handleSubmit} className="space-y-4">

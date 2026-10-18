@@ -7,8 +7,12 @@ import { MeetPip } from './components/MeetPip';
 import { CreationsSection } from './components/Creations/CreationsSection';
 import { OriginStory } from './components/OriginStory';
 import { Gallery } from './components/Gallery';
+import { Guestbook } from './components/Guestbook';
 import { Footer } from './components/Footer';
 import { EasterEggModal } from './components/EasterEggModal';
+import { StarlightCursor } from './components/StarlightCursor';
+import { VisitorMemoryToast } from './components/VisitorMemoryToast';
+import { PipChatCompanion } from './components/PipChatCompanion';
 
 export default function App() {
   // 1. Dream Mode (Theme state: Cozy Daydream vs Midnight Dream)
@@ -82,7 +86,10 @@ export default function App() {
   };
 
   return (
-    <div className={`min-h-screen ${dreamMode === 'night' ? 'theme-night' : 'theme-day'} transition-colors duration-500`}>
+    <div className={`min-h-screen ${dreamMode === 'night' ? 'theme-night' : 'theme-day'} transition-colors duration-500 relative`}>
+      {/* Tier 2: Flashlight / Nightlight Starlight Cursor */}
+      <StarlightCursor dreamMode={dreamMode} />
+
       {/* Top Floating Pill Navigation */}
       <Navigation
         dreamMode={dreamMode}
@@ -92,35 +99,45 @@ export default function App() {
         onToggleMute={handleToggleMute}
       />
 
-      {/* Main Content Landmark (Sections 1-5 & 7 matching whole.png) */}
+      {/* Main Content Landmark */}
       <main>
-        {/* Section 1: Hero Section */}
+        {/* Section 1: Hero Section with Day/Night Mood Expression */}
         <Hero
           lullabyState={lullabyState}
           onToggleLullaby={handleToggleLullaby}
           onEasterEggTrigger={handleEasterEggTrigger}
+          dreamMode={dreamMode}
         />
 
-        {/* Section 2: About Pip Section */}
-        <MeetPip />
+        {/* Section 2: About Pip Section with 3D model, cursor tracking & Day/Night expression */}
+        <MeetPip dreamMode={dreamMode} />
 
-        {/* Section 3: Creations / Projects Section */}
+        {/* Section 3: Creations / Projects Section with SVG route map & falling dreams game */}
         <CreationsSection
           lullabyState={lullabyState}
           onToggleLullaby={handleToggleLullaby}
         />
 
-        {/* Section 4: Origin Story Section */}
+        {/* Section 4: Origin Story Section with Scroll-Driven story & 3D Interactive Storybook */}
         <OriginStory />
 
         {/* Section 5: Gallery Section */}
         <Gallery />
+
+        {/* Section 6: Live Dream Guestbook with Real Backend Ledger */}
+        <Guestbook />
       </main>
 
       {/* Section 7: Footer Section */}
       <Footer />
 
-      {/* Section 6: Secret Easter Egg Modal */}
+      {/* Tier 3: Returning Visitor Memory Toast */}
+      <VisitorMemoryToast />
+
+      {/* Tier 3: Bedside Pip Chat Companion */}
+      <PipChatCompanion />
+
+      {/* Tier 1: Secret Easter Egg Modal */}
       <EasterEggModal
         isOpen={isEasterEggOpen}
         onClose={() => setIsEasterEggOpen(false)}

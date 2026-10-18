@@ -1,0 +1,34 @@
+[
+  {
+    "id": "wish-1792323138655-528",
+    "name": "Jetty the Star DreamerJetty",
+    "message": "May every child sleep wrapped in warm starlight and peaceful lullabies! ✨",
+    "seal": "⭐ Star Wish",
+    "date": "Just now in Midnight Ledger",
+    "isLocalOnly": false
+  },
+  {
+    "id": "wish-seed-1",
+    "name": "Pip (Junior Dream Engineer)",
+    "message": "Welcome to my little workshop! Leave a bedtime wish before you sleep, and I will pack a warm star for your dreams.",
+    "seal": "⭐ Star Wish",
+    "date": "Midnight Nursery Ledger",
+    "isLocalOnly": false
+  },
+  {
+    "id": "wish-seed-2",
+    "name": "Sleepy Cloudlet #07",
+    "message": "Thank you for the warm B-flat lullaby. All the little storm clouds turned into lavender puffballs.",
+    "seal": "☁️ Cloud Hug",
+    "date": "Yesterday at Twilight",
+    "isLocalOnly": false
+  },
+  {
+    "id": "wish-seed-3",
+    "name": "Luna & Toby",
+    "message": "We wished for soft vanilla dreams and woke up with starlight in our hair! ✨",
+    "seal": "🌙 Moon Beam",
+    "date": "Two nights ago",
+    "isLocalOnly": false
+  }
+]

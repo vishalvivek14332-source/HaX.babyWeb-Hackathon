@@ -1,8 +1,15 @@
 import React, { useState } from 'react';
 import { Pip3DViewer } from './Artwork/Pip3DViewer';
+import { PipInteractiveAvatar } from './Artwork/PipInteractiveAvatar';
+import { DreamMode } from '../types';
 
-export function MeetPip() {
-  const [is3DMode, setIs3DMode] = useState(true);
+interface MeetPipProps {
+  dreamMode?: DreamMode;
+}
+
+export function MeetPip({ dreamMode = 'day' }: MeetPipProps) {
+  const [viewMode, setViewMode] = useState<'3d' | 'tracking' | '2d'>('3d');
+
   return (
     <section id="meet-pip" className="py-20 md:py-28 relative overflow-hidden bg-[#fffaf5] border-b border-[#ebd7c8]">
       {/* Background ambient sparkles */}
@@ -61,23 +68,82 @@ export function MeetPip() {
             </div>
           </div>
 
-          {/* Center Column: Pip Character 3D Interactive Viewer */}
-          <div className="lg:col-span-4 flex items-center justify-center relative">
+          {/* Center Column: Pip Character Multi-Mode Interactive Viewer */}
+          <div className="lg:col-span-4 flex flex-col items-center justify-center relative">
             {/* Soft celestial glowing backdrop */}
             <div
-              className="absolute inset-0 rounded-full blur-2xl opacity-60 scale-95"
+              className="absolute inset-0 rounded-full blur-2xl opacity-60 scale-95 pointer-events-none"
               style={{
                 background: 'radial-gradient(circle, #fde68a 0%, #f472b6 40%, transparent 70%)',
               }}
               aria-hidden="true"
             />
 
-            {/* Interactive 3D Pip Model Viewer */}
-            <Pip3DViewer
-              fallbackImage="artwork/pip_avatar_full_v2.png"
-              is3DMode={is3DMode}
-              onToggleViewMode={() => setIs3DMode(!is3DMode)}
-            />
+            {/* View Mode Switcher Pills */}
+            <div className="flex items-center gap-1.5 p-1 rounded-full bg-white/90 border border-[#ecd3c1] shadow-xs mb-4 z-20">
+              <button
+                type="button"
+                onClick={() => setViewMode('3d')}
+                className={`px-3 py-1 rounded-full text-xs font-bold transition-all cursor-pointer ${
+                  viewMode === '3d'
+                    ? 'bg-[#a34063] text-white shadow-xs'
+                    : 'text-[#5a382e] hover:bg-[#fff0e5]'
+                }`}
+                style={{ fontFamily: "'Outfit', sans-serif" }}
+              >
+                🎮 3D Model
+              </button>
+              <button
+                type="button"
+                onClick={() => setViewMode('tracking')}
+                className={`px-3 py-1 rounded-full text-xs font-bold transition-all cursor-pointer ${
+                  viewMode === 'tracking'
+                    ? 'bg-[#a34063] text-white shadow-xs'
+                    : 'text-[#5a382e] hover:bg-[#fff0e5]'
+                }`}
+                style={{ fontFamily: "'Outfit', sans-serif" }}
+              >
+                👀 Eye Tracker
+              </button>
+              <button
+                type="button"
+                onClick={() => setViewMode('2d')}
+                className={`px-3 py-1 rounded-full text-xs font-bold transition-all cursor-pointer ${
+                  viewMode === '2d'
+                    ? 'bg-[#a34063] text-white shadow-xs'
+                    : 'text-[#5a382e] hover:bg-[#fff0e5]'
+                }`}
+                style={{ fontFamily: "'Outfit', sans-serif" }}
+              >
+                🖼️ Storybook
+              </button>
+            </div>
+
+            {/* Display active mode */}
+            {viewMode === '3d' && (
+              <Pip3DViewer
+                fallbackImage="artwork/pip_avatar_full_v2.png"
+                is3DMode={true}
+                onToggleViewMode={() => setViewMode('tracking')}
+              />
+            )}
+
+            {viewMode === 'tracking' && (
+              <div className="p-4 rounded-3xl border-2 border-[#ecd3c1] bg-[#fffaf5]/90 backdrop-blur-sm shadow-xl flex flex-col items-center">
+                <PipInteractiveAvatar dreamMode={dreamMode} size={300} />
+              </div>
+            )}
+
+            {viewMode === '2d' && (
+              <div className="relative z-10 max-w-[320px] animate-float-gentle group">
+                <img
+                  src="artwork/pip_avatar_full_v2.png"
+                  alt="Pip the sleepy skull baby holding a warm glowing star bottle"
+                  className="w-full h-auto drop-shadow-2xl rounded-3xl object-contain border-2 border-[#ecd3c1]"
+                  loading="lazy"
+                />
+              </div>
+            )}
           </div>
 
           {/* Right Column: Quick Facts Card */}
