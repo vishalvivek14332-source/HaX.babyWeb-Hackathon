@@ -1,0 +1,6 @@
+{
+  "name": "Pip's Cozy Dream Workshop",
+  "description": "An interactive storybook workshop where Pip the gentle skull baby crafts little lullabies, glowing nightlights, and peaceful dreams at the Midnight Nursery.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

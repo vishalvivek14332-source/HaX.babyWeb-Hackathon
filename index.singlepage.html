@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pip's Cozy Dream Workshop · Good Dreams Start Small</title>
+  <meta name="description" content="Meet Pip, the sleepy skull baby who designs lullabies, nightlights, and bedtime stories for the whole neighborhood.">
+  <meta name="theme-color" content="#fff8f1">
+
+  <!-- Open Graph -->
+  <meta property="og:title" content="Pip's Cozy Dream Workshop">
+  <meta property="og:description" content="Good Dreams Start Small. Junior Dream Engineer at Midnight Nursery.">
+  <meta property="og:type" content="website">
+
+  <!-- Google Fonts: Fraunces (Chunky Vintage Editorial Serif) + Quicksand + Outfit -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,600;0,9..144,700;0,9..144,800;0,9..144,900;1,9..144,700&family=Outfit:wght@500;600;700;800&family=Quicksand:wght@500;600;700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+
+  <!-- Hanging Star Decorative Element (Top Right as in heronew.png) -->
+  <div class="hanging-star" aria-hidden="true">
+    <div class="star-string"></div>
+    <div class="star-charm">★</div>
+  </div>
+
+  <!-- Cozy Preloader Screen -->
+  <div id="preloader" class="preloader" role="status" aria-live="polite">
+    <div class="loader-content">
+      <div class="loader-celestial">
+        <div class="loader-moon"></div>
+        <div class="loader-stars">
+          <span class="star s1">✦</span>
+          <span class="star s2">★</span>
+          <span class="star s3">✦</span>
+        </div>
+        <div class="loader-ring"></div>
+      </div>
+      <h2 class="loader-title">Awakening Pip's Workshop</h2>
+      <p class="loader-subtitle" id="loader-status">Gathering 300 starlight frames for the dream machine...</p>
+      
+      <div class="loader-bar-wrapper">
+        <div class="loader-bar" id="loader-progress-bar"></div>
+      </div>
+      
+      <div class="loader-meta">
+        <span id="loader-percent">0%</span>
+        <span class="loader-separator">·</span>
+        <span id="loader-count">0 / 300 frames</span>
+      </div>
+
+      <button id="loader-skip-btn" class="loader-skip-btn" type="button" style="display: none;">
+        <span>Enter Dream Workshop ★</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- Ambient Stardust Cursor Trail -->
+  <canvas id="cursor-canvas" class="cursor-canvas" aria-hidden="true"></canvas>
+
+  <!-- Pinned Animation Canvas Viewport with Ambient Edge Backlighting -->
+  <div class="canvas-viewport" id="canvas-container">
+    <canvas id="ambient-canvas" class="ambient-canvas" aria-hidden="true"></canvas>
+    <canvas id="animation-canvas" class="main-canvas" aria-label="Pip the skull baby animation on fluffy clouds with a music box and glowing star"></canvas>
+  </div>
+
+  <!-- Floating Header / Pill Navigation Bar (Matches heronew.png exactly) -->
+  <header class="floating-nav-wrapper" id="main-header">
+    <nav class="pill-navbar" aria-label="Main Navigation">
+      
+      <!-- Left: Pip's Brand Logo -->
+      <a href="#hero" class="nav-brand" aria-label="Pip's Cozy Dream Workshop">
+        <div class="brand-top-row">
+          <span class="brand-star" aria-hidden="true">★</span>
+          <span class="brand-name">Pip's</span>
+          <span class="brand-star" aria-hidden="true">★</span>
+        </div>
+        <span class="brand-sub">Cozy Dream Workshop</span>
+      </a>
+
+      <!-- Center: Menu Links -->
+      <div class="nav-menu-links">
+        <a href="#hero" class="nav-item active" aria-current="page">Home</a>
+        <a href="#about" class="nav-item">About</a>
+        <a href="#creations" class="nav-item">Creations</a>
+        <a href="#story" class="nav-item">Story</a>
+        <a href="#gallery" class="nav-item">Gallery</a>
+      </div>
+
+      <!-- Right: Dream Mode Button -->
+      <div class="nav-action-wrapper">
+        <button id="dream-mode-btn" class="dream-mode-btn" type="button" aria-label="Toggle Dream Mode or Audio">
+          <span class="mode-icon" aria-hidden="true">🌙</span>
+          <span id="dream-mode-text">Dream Mode</span>
+        </button>
+      </div>
+
+    </nav>
+  </header>
+
+  <!-- Hero Content (Matches heronew.png layout, typography, and buttons) -->
+  <main class="hero-overlay-container" id="hero">
+    <div class="hero-content-left" id="hero-content">
+
+      <!-- Eyebrow: Junior Dream Engineer -->
+      <div class="hero-kicker">
+        <span class="kicker-sparkle">✦</span>
+        <span class="kicker-text">JUNIOR DREAM ENGINEER AT MIDNIGHT NURSERY</span>
+        <span class="kicker-paw">🐾</span>
+      </div>
+
+      <!-- Headline: Good Dreams Start Small with hand-drawn flourish -->
+      <h1 class="hero-title">
+        <span class="title-line1">Good Dreams</span>
+        <span class="title-line2">
+          Start <span class="highlight-berry">Small.</span>
+          <span class="title-flourish" aria-hidden="true">
+            <svg class="flourish-curl" width="68" height="32" viewBox="0 0 68 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M2 14C12 28 32 30 46 16C54 8 62 10 65 14" stroke="#a34063" stroke-width="2.5" stroke-linecap="round"/>
+            </svg>
+            <span class="flourish-star">★</span>
+          </span>
+        </span>
+      </h1>
+
+      <!-- Subtitle Description -->
+      <p class="hero-subtext">
+        Meet Pip, the sleepy skull baby who designs lullabies, nightlights, and bedtime stories for the whole neighborhood.
+      </p>
+
+      <!-- CTA Buttons Group -->
+      <div class="hero-actions">
+        
+        <!-- Primary CTA: Explore Pip's World -->
+        <a href="#creations" class="cta-pill-primary" id="explore-btn">
+          <span class="cta-star-icon" aria-hidden="true">★</span>
+          <span>Explore Pip's World</span>
+          <span class="cta-arrow-icon" aria-hidden="true">→</span>
+        </a>
+
+        <!-- Secondary CTA: Play Animation & Lullaby -->
+        <button type="button" class="cta-pill-secondary" id="lullaby-btn" aria-label="Play or pause Pip's Animation & Lullaby">
+          <span class="play-circle-icon" aria-hidden="true">
+            <svg class="play-triangle" id="play-btn-svg" width="10" height="12" viewBox="0 0 10 12" fill="currentColor">
+              <path d="M1 1L9 6L1 11V1Z"/>
+            </svg>
+          </span>
+          <span id="lullaby-btn-text">Play Animation</span>
+        </button>
+
+      </div>
+
+    </div>
+  </main>
+
+
+  <script src="script.js"></script>
+</body>
+</html>

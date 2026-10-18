@@ -1,0 +1,238 @@
+@import "tailwindcss";
+
+@layer base {
+  :root {
+    --font-serif: 'Fraunces', Georgia, serif;
+    --font-sans: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+  }
+
+  body {
+    font-family: var(--font-sans);
+    transition: background-color 0.5s cubic-bezier(0.16, 1, 0.3, 1), color 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  h1, h2, h3, h4, .font-editorial {
+    font-family: var(--font-serif);
+    font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+  }
+}
+
+/* Custom theme tokens */
+.theme-day {
+  --bg-main: #FFF8F1;
+  --bg-surface: #FFFFFF;
+  --bg-surface-soft: #FBF4EC;
+  --bg-surface-elevated: #FFFDFC;
+  --text-main: #5C4033;
+  --text-muted: #8E7163;
+  --text-soft: #B29B8F;
+  --accent-primary: #A34063;
+  --accent-primary-hover: #8B3452;
+  --accent-secondary: #B9A1E8;
+  --accent-gold: #E5A83B;
+  --border-subtle: #EFE3D5;
+  --border-focus: #A34063;
+  --card-shadow: 0 4px 20px -2px rgba(92, 64, 51, 0.06), 0 2px 6px -1px rgba(92, 64, 51, 0.04);
+  --card-shadow-hover: 0 12px 32px -4px rgba(92, 64, 51, 0.12), 0 4px 12px -2px rgba(92, 64, 51, 0.06);
+  --glow-pip: rgba(229, 168, 59, 0.18);
+  background-color: var(--bg-main);
+  color: var(--text-main);
+}
+
+.theme-night {
+  --bg-main: #171526;
+  --bg-surface: #201D33;
+  --bg-surface-soft: #282440;
+  --bg-surface-elevated: #2E2A4A;
+  --text-main: #FAF5ED;
+  --text-muted: #C0B7D6;
+  --text-soft: #857D9D;
+  --accent-primary: #B9A1E8;
+  --accent-primary-hover: #CCAFF7;
+  --accent-secondary: #D9779B;
+  --accent-gold: #F7D070;
+  --border-subtle: #342F54;
+  --border-focus: #B9A1E8;
+  --card-shadow: 0 4px 24px -2px rgba(0, 0, 0, 0.35), 0 2px 8px -1px rgba(0, 0, 0, 0.2);
+  --card-shadow-hover: 0 14px 36px -4px rgba(0, 0, 0, 0.5), 0 6px 16px -2px rgba(185, 161, 232, 0.15);
+  --glow-pip: rgba(185, 161, 232, 0.25);
+  background-color: var(--bg-main);
+  color: var(--text-main);
+}
+
+/* Animations */
+@keyframes floatGentle {
+  0%, 100% {
+    transform: translateY(0px) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-8px) rotate(0.8deg);
+  }
+}
+
+@keyframes ambientGlow {
+  0%, 100% {
+    opacity: 0.4;
+    transform: scale(0.96);
+  }
+  50% {
+    opacity: 0.75;
+    transform: scale(1.05);
+  }
+}
+
+@keyframes twinkleA {
+  0%, 100% { opacity: 0.2; transform: scale(0.85); }
+  50% { opacity: 1; transform: scale(1.15); }
+}
+
+@keyframes twinkleB {
+  0%, 100% { opacity: 0.9; transform: scale(1.1); }
+  50% { opacity: 0.15; transform: scale(0.8); }
+}
+
+@keyframes twinkleC {
+  0%, 100% { opacity: 0.3; transform: scale(0.9); }
+  35% { opacity: 1; transform: scale(1.25); }
+}
+
+@keyframes driftSparkle {
+  0% {
+    transform: translateY(0px) translateX(0px);
+    opacity: 0;
+  }
+  20% {
+    opacity: 0.85;
+  }
+  80% {
+    opacity: 0.85;
+  }
+  100% {
+    transform: translateY(-50px) translateX(10px);
+    opacity: 0;
+  }
+}
+
+@keyframes noteFloatUp {
+  0% {
+    transform: translateY(0) scale(0.7) rotate(-8deg);
+    opacity: 0;
+  }
+  30% {
+    opacity: 0.95;
+  }
+  75% {
+    opacity: 0.9;
+    transform: translateY(-28px) scale(1) rotate(8deg);
+  }
+  100% {
+    transform: translateY(-48px) scale(0.75) rotate(-10deg);
+    opacity: 0;
+  }
+}
+
+@keyframes starPathFlow {
+  0% { stroke-dashoffset: 400; }
+  100% { stroke-dashoffset: 0; }
+}
+
+@keyframes wobbleSlight {
+  0%, 100% { transform: rotate(0deg); }
+  25% { transform: rotate(-5deg); }
+  75% { transform: rotate(5deg); }
+}
+
+.animate-float-gentle {
+  animation: floatGentle 5s ease-in-out infinite;
+}
+
+.animate-ambient-glow {
+  animation: ambientGlow 4.5s ease-in-out infinite;
+}
+
+.animate-twinkle-a {
+  animation: twinkleA 3.2s ease-in-out infinite;
+}
+
+.animate-twinkle-b {
+  animation: twinkleB 4.1s ease-in-out infinite;
+}
+
+.animate-twinkle-c {
+  animation: twinkleC 2.8s ease-in-out infinite;
+}
+
+.animate-drift-sparkle {
+  animation: driftSparkle 3.5s cubic-bezier(0.22, 1, 0.36, 1) infinite;
+}
+
+.animate-note-1 {
+  animation: noteFloatUp 2.8s ease-out infinite;
+}
+
+.animate-note-2 {
+  animation: noteFloatUp 3.2s ease-out infinite 0.7s;
+}
+
+.animate-note-3 {
+  animation: noteFloatUp 2.9s ease-out infinite 1.4s;
+}
+
+.animate-wobble {
+  animation: wobbleSlight 0.6s ease-in-out;
+}
+
+/* Accessibility: Respect Reduced Motion */
+@media (prefers-reduced-motion: reduce) {
+  *, ::before, ::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+  .animate-float-gentle,
+  .animate-ambient-glow,
+  .animate-twinkle-a,
+  .animate-twinkle-b,
+  .animate-twinkle-c,
+  .animate-drift-sparkle,
+  .animate-note-1,
+  .animate-note-2,
+  .animate-note-3,
+  .hanging-star {
+    animation: none !important;
+  }
+}
+
+/* Hanging Star Decoration (Top Right as in heronew.png) */
+.hanging-star {
+  position: absolute;
+  top: 0;
+  right: 5vw;
+  z-index: 50;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  pointer-events: none;
+  transform-origin: top center;
+  animation: starSwing 4s ease-in-out infinite alternate;
+}
+
+.star-string {
+  width: 1.5px;
+  height: 60px;
+  background: linear-gradient(to bottom, rgba(229, 169, 60, 0.2), #e5a93c);
+}
+
+.star-charm {
+  color: #e5a93c;
+  font-size: 1.5rem;
+  line-height: 1;
+  filter: drop-shadow(0 2px 10px rgba(229, 169, 60, 0.6));
+}
+
+@keyframes starSwing {
+  0% { transform: rotate(-5deg); }
+  100% { transform: rotate(5deg); }
+}
+
