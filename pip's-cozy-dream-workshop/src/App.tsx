@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { DreamMode, LullabyState } from './types';
 import { musicBox } from './utils/audio';
+import { AuthProvider } from './context/AuthContext';
 import { Navigation } from './components/Navigation';
 import { Hero } from './components/Hero';
 import { MeetPip } from './components/MeetPip';
@@ -13,6 +14,9 @@ import { EasterEggModal } from './components/EasterEggModal';
 import { StarlightCursor } from './components/StarlightCursor';
 import { VisitorMemoryToast } from './components/VisitorMemoryToast';
 import { PipChatCompanion } from './components/PipChatCompanion';
+import { LullabyJukeboxModal } from './components/LullabyJukeboxModal';
+import { AuthModal } from './components/AuthModal';
+import { UserProfileModal } from './components/UserProfileModal';
 
 export default function App() {
   // 1. Dream Mode (Theme state: Cozy Daydream vs Midnight Dream)
@@ -34,8 +38,10 @@ export default function App() {
     currentTrackTitle: "Pip's Sleepy Starlight Melody",
   });
 
-  // 3. Easter Egg Modal State
+  // 3. Modal States
   const [isEasterEggOpen, setIsEasterEggOpen] = useState(false);
+  const [isJukeboxOpen, setIsJukeboxOpen] = useState(false);
+  const [isProfileOpen, setIsProfileOpen] = useState(false);
 
   // Sync theme with DOM and localStorage
   useEffect(() => {
@@ -61,7 +67,10 @@ export default function App() {
         ...prev,
         isPlaying: st.isPlaying,
         isMuted: st.isMuted,
+        volume: st.volume,
         currentTrackTitle: st.currentTrackTitle,
+        currentTrackId: st.currentTrackId,
+        currentTrackIndex: st.currentTrackIndex,
       }));
     });
     return () => {
@@ -86,62 +95,86 @@ export default function App() {
   };
 
   return (
-    <div className={`min-h-screen ${dreamMode === 'night' ? 'theme-night' : 'theme-day'} transition-colors duration-500 relative`}>
-      {/* Tier 2: Flashlight / Nightlight Starlight Cursor */}
-      <StarlightCursor dreamMode={dreamMode} />
+    <AuthProvider>
+      <div className={`min-h-screen ${dreamMode === 'night' ? 'theme-night' : 'theme-day'} transition-colors duration-500 relative`}>
+        {/* Tier 2: Flashlight / Nightlight Starlight Cursor */}
+        <StarlightCursor dreamMode={dreamMode} />
 
-      {/* Top Floating Pill Navigation */}
-      <Navigation
-        dreamMode={dreamMode}
-        onToggleDreamMode={handleToggleDreamMode}
-        lullabyState={lullabyState}
-        onToggleLullaby={handleToggleLullaby}
-        onToggleMute={handleToggleMute}
-      />
-
-      {/* Main Content Landmark */}
-      <main>
-        {/* Section 1: Hero Section with Day/Night Mood Expression */}
-        <Hero
-          lullabyState={lullabyState}
-          onToggleLullaby={handleToggleLullaby}
-          onEasterEggTrigger={handleEasterEggTrigger}
+        {/* Top Floating Pill Navigation with Jukebox and Auth controls */}
+        <Navigation
           dreamMode={dreamMode}
-        />
-
-        {/* Section 2: About Pip Section with 3D model, cursor tracking & Day/Night expression */}
-        <MeetPip dreamMode={dreamMode} />
-
-        {/* Section 3: Creations / Projects Section with SVG route map & falling dreams game */}
-        <CreationsSection
+          onToggleDreamMode={handleToggleDreamMode}
           lullabyState={lullabyState}
           onToggleLullaby={handleToggleLullaby}
+          onToggleMute={handleToggleMute}
+          onOpenJukebox={() => setIsJukeboxOpen(true)}
+          onOpenProfile={() => setIsProfileOpen(true)}
         />
 
-        {/* Section 4: Origin Story Section with Scroll-Driven story & 3D Interactive Storybook */}
-        <OriginStory />
+        {/* Main Content Landmark */}
+        <main>
+          {/* Section 1: Hero Section with Day/Night Mood Expression */}
+          <Hero
+            lullabyState={lullabyState}
+            onToggleLullaby={handleToggleLullaby}
+            onEasterEggTrigger={handleEasterEggTrigger}
+            dreamMode={dreamMode}
+          />
 
-        {/* Section 5: Gallery Section */}
-        <Gallery />
+          {/* Section 2: About Pip Section with 3D model, cursor tracking & Day/Night expression */}
+          <MeetPip dreamMode={dreamMode} />
 
-        {/* Section 6: Live Dream Guestbook with Real Backend Ledger */}
-        <Guestbook />
-      </main>
+          {/* Section 3: Creations / Projects Section with SVG route map, falling dreams game & Jukebox trigger */}
+          <CreationsSection
+            lullabyState={lullabyState}
+            onToggleLullaby={handleToggleLullaby}
+            onOpenJukebox={() => setIsJukeboxOpen(true)}
+          />
 
-      {/* Section 7: Footer Section */}
-      <Footer />
+          {/* Section 4: Origin Story Section with Scroll-Driven story & 3D Interactive Storybook */}
+          <OriginStory />
 
-      {/* Tier 3: Returning Visitor Memory Toast */}
-      <VisitorMemoryToast />
+          {/* Section 5: Gallery Section */}
+          <Gallery />
 
-      {/* Tier 3: Bedside Pip Chat Companion */}
-      <PipChatCompanion />
+          {/* Section 6: Live Dream Guestbook with Real Backend Ledger */}
+          <Guestbook />
+        </main>
 
-      {/* Tier 1: Secret Easter Egg Modal */}
-      <EasterEggModal
-        isOpen={isEasterEggOpen}
-        onClose={() => setIsEasterEggOpen(false)}
-      />
-    </div>
+        {/* Section 7: Footer Section */}
+        <Footer />
+
+        {/* Tier 3: Returning Visitor Memory Toast */}
+        <VisitorMemoryToast />
+
+        {/* Tier 3: Bedside Pip Chat Companion */}
+        <PipChatCompanion />
+
+        {/* Tier 1: Secret Easter Egg Modal */}
+        <EasterEggModal
+          isOpen={isEasterEggOpen}
+          onClose={() => setIsEasterEggOpen(false)}
+        />
+
+        {/* New: Bedtime Melodies Jukebox Modal (Set of 6 musics) */}
+        <LullabyJukeboxModal
+          isOpen={isJukeboxOpen}
+          onClose={() => setIsJukeboxOpen(false)}
+          lullabyState={lullabyState}
+          onToggleLullaby={handleToggleLullaby}
+          onToggleMute={handleToggleMute}
+        />
+
+        {/* New: Dreamer Authentication Modal (Sign In & Sign Up) */}
+        <AuthModal />
+
+        {/* New: Dreamer Pass Profile Modal */}
+        <UserProfileModal
+          isOpen={isProfileOpen}
+          onClose={() => setIsProfileOpen(false)}
+          onOpenJukebox={() => setIsJukeboxOpen(true)}
+        />
+      </div>
+    </AuthProvider>
   );
 }

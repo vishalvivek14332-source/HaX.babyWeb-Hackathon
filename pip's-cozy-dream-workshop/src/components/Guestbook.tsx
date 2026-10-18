@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { Send, Heart, Star, Moon, Cloud, CheckCircle, Sparkles, Trash2 } from 'lucide-react';
+import { Send, Heart, Star, Moon, Cloud, CheckCircle, Sparkles, Trash2, User } from 'lucide-react';
 import { GuestbookEntry } from '../types';
+import { useAuth } from '../context/AuthContext';
 
 const INITIAL_WORKSHOP_LOGS: GuestbookEntry[] = [
   {
@@ -22,6 +23,7 @@ const INITIAL_WORKSHOP_LOGS: GuestbookEntry[] = [
 ];
 
 export function Guestbook() {
+  const { user } = useAuth();
   const [entries, setEntries] = useState<GuestbookEntry[]>(() => {
     try {
       const saved = localStorage.getItem('pip_guestbook_wishes');
@@ -39,6 +41,19 @@ export function Guestbook() {
       return '';
     }
   });
+
+  // Sync with logged in user
+  useEffect(() => {
+    if (user) {
+      if (user.nickname || user.username) {
+        setName(user.nickname || user.username);
+      }
+      if (user.seal) {
+        setSelectedSeal(user.seal);
+      }
+    }
+  }, [user]);
+
   const [message, setMessage] = useState('');
   const [selectedSeal, setSelectedSeal] = useState('⭐ Star Wish');
   const [errorMessage, setErrorMessage] = useState<string | null>(null);

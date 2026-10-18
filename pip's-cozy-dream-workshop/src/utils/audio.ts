@@ -1,13 +1,14 @@
 /**
  * Web Audio API Music Box Synthesizer for Pip's Cozy Dream Workshop
  * Creates gentle, bell-like music box tones with natural resonance and decay.
+ * Contains a complete set of 6 soothing bedtime melodies.
  */
 
 // Musical note frequencies (Hz)
 const NOTES: Record<string, number> = {
   C4: 261.63, D4: 293.66, E4: 329.63, F4: 349.23, G4: 392.00, A4: 440.00, B4: 493.88,
   C5: 523.25, D5: 587.33, E5: 659.25, F5: 698.46, G5: 783.99, A5: 880.00, B5: 987.77,
-  C6: 1046.50, D6: 1174.66, E6: 1318.51, G6: 1567.98,
+  C6: 1046.50, D6: 1174.66, E6: 1318.51, F6: 1396.91, G6: 1567.98, A6: 1760.00,
   REST: 0,
 };
 
@@ -15,6 +16,8 @@ const NOTES: Record<string, number> = {
 export interface MelodyTrack {
   id: string;
   title: string;
+  category: string;
+  description: string;
   tempo: number; // BPM
   notes: Array<[string, number]>;
 }
@@ -23,9 +26,10 @@ export const LULLABY_TRACKS: MelodyTrack[] = [
   {
     id: 'brahms',
     title: "Pip's Sleepy Starlight Melody",
+    category: 'Classic Music Box',
+    description: 'Brahms-inspired warm brass bells designed to soften eyelids and summon sweet dreams.',
     tempo: 76,
     notes: [
-      // Soothing Brahms-inspired lullaby
       ['E5', 1], ['E5', 1.5], ['G5', 1.5],
       ['E5', 1], ['E5', 1.5], ['G5', 1.5],
       ['E5', 1], ['G5', 1], ['C6', 2], ['B5', 1],
@@ -35,7 +39,6 @@ export const LULLABY_TRACKS: MelodyTrack[] = [
       ['D5', 1], ['F5', 1], ['B5', 2], ['A5', 1],
       ['G5', 1], ['B5', 1], ['C6', 3],
       ['REST', 1],
-      // Second phrase
       ['C5', 1], ['C5', 1], ['C6', 2.5], ['A5', 1],
       ['F5', 1], ['G5', 1], ['E5', 2.5], ['C5', 1],
       ['F5', 1], ['G5', 1], ['A5', 2], ['F5', 1],
@@ -49,6 +52,8 @@ export const LULLABY_TRACKS: MelodyTrack[] = [
   {
     id: 'starfall',
     title: 'Starfall Waltz in the Nursery',
+    category: 'Celestial Waltz',
+    description: 'Lilting 3/4 waltz that floats through bedroom windows like falling golden meteors.',
     tempo: 84,
     notes: [
       ['G5', 1], ['E5', 1], ['C5', 1], ['G5', 2], ['E5', 1],
@@ -57,11 +62,18 @@ export const LULLABY_TRACKS: MelodyTrack[] = [
       ['B5', 1], ['A5', 1], ['G5', 1], ['E5', 2], ['C5', 1],
       ['D5', 1.5], ['E5', 1.5], ['C5', 3],
       ['REST', 1],
+      ['E5', 1], ['G5', 1], ['C6', 1], ['D6', 2], ['C6', 1],
+      ['B5', 1.5], ['A5', 1.5], ['G5', 3],
+      ['F5', 1], ['A5', 1], ['C6', 1], ['B5', 2], ['A5', 1],
+      ['G5', 1.5], ['E5', 1.5], ['C5', 3],
+      ['REST', 1],
     ],
   },
   {
     id: 'clouds',
     title: 'Cotton Cloud Cradle',
+    category: 'Pentatonic Ambient',
+    description: 'Soft pentatonic chimes that mimic gentle rocking on a lavender cloud cushion.',
     tempo: 70,
     notes: [
       ['C5', 1.5], ['E5', 1.5], ['G5', 1.5], ['C6', 2],
@@ -69,9 +81,75 @@ export const LULLABY_TRACKS: MelodyTrack[] = [
       ['A5', 1.5], ['F5', 1.5], ['D5', 1.5], ['F5', 2],
       ['E5', 1.5], ['C5', 1.5], ['D5', 1.5], ['C5', 3],
       ['REST', 1],
+      ['G5', 1.5], ['C6', 1.5], ['E6', 2], ['D6', 1],
+      ['C6', 1.5], ['A5', 1.5], ['G5', 2], ['E5', 1],
+      ['D5', 1.5], ['G5', 1.5], ['E5', 1.5], ['D5', 2],
+      ['C5', 3.5], ['REST', 1],
+    ],
+  },
+  {
+    id: 'chimneys',
+    title: 'Moonlit Chimney Lullaby',
+    category: 'Midnight Serenade',
+    description: 'Peaceful descending harmonies echoing over sleepy rooftops and quiet chimneys.',
+    tempo: 68,
+    notes: [
+      ['C6', 2], ['B5', 2], ['A5', 2], ['G5', 2],
+      ['F5', 2], ['E5', 2], ['F5', 1.5], ['G5', 1.5],
+      ['E5', 3], ['REST', 1],
+      ['G5', 2], ['F5', 2], ['E5', 2], ['D5', 2],
+      ['C5', 2], ['E5', 1.5], ['G5', 1.5], ['C6', 3],
+      ['REST', 1],
+      ['A5', 1.5], ['C6', 1.5], ['B5', 1.5], ['G5', 1.5],
+      ['A5', 1.5], ['F5', 1.5], ['G5', 3],
+      ['E5', 1.5], ['D5', 1.5], ['C5', 3.5],
+      ['REST', 1],
+    ],
+  },
+  {
+    id: 'lavender',
+    title: 'Lavender Dream Meadow',
+    category: 'Twilight Reverie',
+    description: 'Delicate arpeggiated bells reminiscent of moonlight drifting through fields of lavender.',
+    tempo: 72,
+    notes: [
+      ['E5', 1], ['G5', 1], ['B5', 1], ['D6', 2], ['C6', 1],
+      ['B5', 1.5], ['G5', 1.5], ['E5', 2.5], ['REST', 0.5],
+      ['F5', 1], ['A5', 1], ['C6', 1], ['E6', 2], ['D6', 1],
+      ['C6', 1.5], ['A5', 1.5], ['F5', 2.5], ['REST', 0.5],
+      ['D5', 1], ['F5', 1], ['A5', 1], ['C6', 2], ['B5', 1],
+      ['G5', 1.5], ['B5', 1.5], ['C6', 3],
+      ['REST', 1],
+    ],
+  },
+  {
+    id: 'owl',
+    title: "The Little Owl's Goodnight Song",
+    category: 'Nursery Tune',
+    description: 'A cozy, inquisitive tune for night owls getting tucked under soft starlight blankets.',
+    tempo: 80,
+    notes: [
+      ['C5', 1], ['G5', 1], ['A5', 1], ['G5', 2],
+      ['E5', 1], ['F5', 1], ['G5', 1], ['E5', 2],
+      ['D5', 1], ['E5', 1], ['F5', 1], ['D5', 1],
+      ['C5', 1], ['E5', 1], ['G5', 2],
+      ['REST', 1],
+      ['C6', 1], ['G5', 1], ['A5', 1], ['G5', 2],
+      ['F5', 1], ['E5', 1], ['D5', 1], ['C5', 3],
+      ['REST', 1],
     ],
   },
 ];
+
+export interface AudioState {
+  isPlaying: boolean;
+  isMuted: boolean;
+  volume: number;
+  currentTrackTitle: string;
+  currentTrackId: string;
+  currentTrackIndex: number;
+  currentNote: string;
+}
 
 class MusicBoxAudioService {
   private ctx: AudioContext | null = null;
@@ -81,13 +159,15 @@ class MusicBoxAudioService {
   private currentTrackIndex = 0;
   private currentNoteIndex = 0;
   private timerId: number | null = null;
-  private listeners: Set<(state: { isPlaying: boolean; isMuted: boolean; currentTrackTitle: string; currentNote: string }) => void> = new Set();
+  private listeners: Set<(state: AudioState) => void> = new Set();
   private currentNoteName = '';
 
   private getContext(): AudioContext | null {
     if (typeof window === 'undefined') return null;
     if (!this.ctx) {
-      const AudioContextClass = window.AudioContext || (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext;
+      const AudioContextClass =
+        window.AudioContext ||
+        (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext;
       if (AudioContextClass) {
         this.ctx = new AudioContextClass();
       }
@@ -98,7 +178,7 @@ class MusicBoxAudioService {
     return this.ctx;
   }
 
-  public subscribe(cb: (state: { isPlaying: boolean; isMuted: boolean; currentTrackTitle: string; currentNote: string }) => void) {
+  public subscribe(cb: (state: AudioState) => void) {
     this.listeners.add(cb);
     cb(this.getState());
     return () => {
@@ -106,13 +186,25 @@ class MusicBoxAudioService {
     };
   }
 
-  public getState() {
+  public getState(): AudioState {
+    const track = LULLABY_TRACKS[this.currentTrackIndex] || LULLABY_TRACKS[0];
     return {
       isPlaying: this.isPlaying,
       isMuted: this.isMuted,
-      currentTrackTitle: LULLABY_TRACKS[this.currentTrackIndex]?.title || 'Sleepy Tune',
+      volume: this.volume,
+      currentTrackTitle: track.title,
+      currentTrackId: track.id,
+      currentTrackIndex: this.currentTrackIndex,
       currentNote: this.currentNoteName,
     };
+  }
+
+  public getTracks(): MelodyTrack[] {
+    return LULLABY_TRACKS;
+  }
+
+  public getCurrentTrack(): MelodyTrack {
+    return LULLABY_TRACKS[this.currentTrackIndex] || LULLABY_TRACKS[0];
   }
 
   private notify() {
@@ -132,33 +224,29 @@ class MusicBoxAudioService {
       const now = ctx.currentTime;
       const masterVol = this.volume * noteVolumeScale;
 
-      // Master gain for this note
       const noteGain = ctx.createGain();
       noteGain.connect(ctx.destination);
 
-      // Low pass filter to keep tones warm and soft like a wooden music box
       const filter = ctx.createBiquadFilter();
       filter.type = 'lowpass';
       filter.frequency.setValueAtTime(3200, now);
       filter.Q.setValueAtTime(1.2, now);
       filter.connect(noteGain);
 
-      // Fundamental oscillator (sine with quick attack, singing decay)
+      // Fundamental oscillator
       const osc1 = ctx.createOscillator();
       osc1.type = 'sine';
       osc1.frequency.setValueAtTime(freq, now);
 
       const gain1 = ctx.createGain();
-      // Attack: gentle pluck
       gain1.gain.setValueAtTime(0.0001, now);
       gain1.gain.linearRampToValueAtTime(masterVol * 0.45, now + 0.008);
-      // Bell exponential decay
       gain1.gain.exponentialRampToValueAtTime(0.0001, now + durationSec);
 
       osc1.connect(gain1);
       gain1.connect(filter);
 
-      // Overtone 1: high metallic tine chime (2.0x or 3.0x frequency)
+      // Overtone 1: high bell tine
       const osc2 = ctx.createOscillator();
       osc2.type = 'sine';
       osc2.frequency.setValueAtTime(freq * 2.76, now);
@@ -184,7 +272,6 @@ class MusicBoxAudioService {
       osc3.connect(gain3);
       gain3.connect(filter);
 
-      // Start & Stop
       osc1.start(now);
       osc2.start(now);
       osc3.start(now);
@@ -246,11 +333,21 @@ class MusicBoxAudioService {
     this.notify();
   }
 
+  public setVolume(vol: number) {
+    this.volume = Math.max(0, Math.min(1, vol));
+    this.notify();
+  }
+
+  public getVolume(): number {
+    return this.volume;
+  }
+
   public setTrack(trackIndex: number) {
     if (trackIndex >= 0 && trackIndex < LULLABY_TRACKS.length) {
       const wasPlaying = this.isPlaying;
       this.stop();
       this.currentTrackIndex = trackIndex;
+      this.currentNoteIndex = 0;
       if (wasPlaying) {
         this.start();
       } else {
@@ -264,13 +361,18 @@ class MusicBoxAudioService {
     this.setTrack(nextIdx);
   }
 
+  public prevTrack() {
+    const prevIdx = (this.currentTrackIndex - 1 + LULLABY_TRACKS.length) % LULLABY_TRACKS.length;
+    this.setTrack(prevIdx);
+  }
+
   private scheduleNextNote() {
     if (!this.isPlaying) return;
     const track = LULLABY_TRACKS[this.currentTrackIndex];
     if (!track || track.notes.length === 0) return;
 
     if (this.currentNoteIndex >= track.notes.length) {
-      this.currentNoteIndex = 0; // Loop seamlessly
+      this.currentNoteIndex = 0; // Loop track
     }
 
     const [noteName, beats] = track.notes[this.currentNoteIndex];
@@ -280,7 +382,6 @@ class MusicBoxAudioService {
 
     const freq = NOTES[noteName] || 0;
     if (freq > 0) {
-      // Gentle chime ringing
       const ringDuration = Math.max(1.2, beats * secondsPerBeat * 1.5);
       this.playChimeNote(freq, ringDuration, 1.0);
     }

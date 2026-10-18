@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { Menu, X } from 'lucide-react';
+import { Menu, X, Music, User, Sparkles } from 'lucide-react';
 import { DreamMode, LullabyState } from '../types';
+import { useAuth } from '../context/AuthContext';
 
 interface NavigationProps {
   dreamMode: DreamMode;
@@ -8,6 +9,8 @@ interface NavigationProps {
   lullabyState: LullabyState;
   onToggleLullaby: () => void;
   onToggleMute: () => void;
+  onOpenJukebox: () => void;
+  onOpenProfile: () => void;
 }
 
 export function Navigation({
@@ -16,7 +19,10 @@ export function Navigation({
   lullabyState,
   onToggleLullaby,
   onToggleMute,
+  onOpenJukebox,
+  onOpenProfile,
 }: NavigationProps) {
+  const { user, openAuthModal } = useAuth();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [activeSection, setActiveSection] = useState('home');
 
@@ -130,21 +136,62 @@ export function Navigation({
           })}
         </div>
 
-        {/* Right: Dream Mode Action Pill (Matches heronew.png exactly) */}
-        <div className="flex items-center gap-2">
+        {/* Right: Jukebox + Auth + Dream Mode Controls */}
+        <div className="flex items-center gap-1.5 sm:gap-2">
+          {/* Music Jukebox Trigger Button */}
+          <button
+            type="button"
+            onClick={onOpenJukebox}
+            className="flex items-center gap-1.5 px-3 sm:px-3.5 py-1.5 sm:py-2 rounded-full font-bold text-xs bg-[#fce7ed] text-[#a34063] border border-[#f5c6d3] hover:bg-[#fbcfe8] hover:scale-105 active:scale-95 transition-all cursor-pointer shadow-2xs"
+            style={{ fontFamily: "'Outfit', sans-serif" }}
+            title="Open Bedtime Melodies Jukebox (Set of 6 musics)"
+          >
+            <span className={lullabyState.isPlaying ? 'animate-bounce' : ''}>🎵</span>
+            <span className="hidden sm:inline">Melodies (6)</span>
+            {lullabyState.isPlaying && (
+              <span className="w-1.5 h-1.5 rounded-full bg-[#a34063] animate-ping" />
+            )}
+          </button>
+
+          {/* Dreamer Pass Auth Button */}
+          {user ? (
+            <button
+              type="button"
+              onClick={onOpenProfile}
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-full font-bold text-xs bg-[#fff0e5] text-[#46251e] border border-[#ecd3c1] hover:border-[#a34063] hover:scale-105 active:scale-95 transition-all cursor-pointer shadow-2xs"
+              style={{ fontFamily: "'Outfit', sans-serif" }}
+              title="View your Dreamer Pass profile"
+            >
+              <span className="text-sm">{user.seal ? user.seal.split(' ')[0] : '⭐'}</span>
+              <span className="max-w-[70px] sm:max-w-[100px] truncate">{user.nickname || user.username}</span>
+            </button>
+          ) : (
+            <button
+              type="button"
+              onClick={() => openAuthModal('login')}
+              className="flex items-center gap-1.5 px-3 sm:px-3.5 py-1.5 sm:py-2 rounded-full font-bold text-xs bg-[#fff8f1] text-[#a34063] border border-[#ecd3c1] hover:bg-[#fce7ed] hover:border-[#a34063] hover:scale-105 active:scale-95 transition-all cursor-pointer shadow-2xs"
+              style={{ fontFamily: "'Outfit', sans-serif" }}
+              title="Sign in or create a Dreamer Pass"
+            >
+              <span>🔑</span>
+              <span>Sign In</span>
+            </button>
+          )}
+
+          {/* Dream Mode Toggle */}
           <button
             onClick={onToggleDreamMode}
             type="button"
             aria-label="Toggle Dream Mode"
-            className="flex items-center gap-2 px-4 sm:px-5 py-2 sm:py-2.5 rounded-full font-bold text-xs sm:text-[0.88rem] text-[#fff6ee] transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lg active:translate-y-0 cursor-pointer shadow-md"
+            className="flex items-center gap-1.5 sm:gap-2 px-3.5 sm:px-4 py-1.5 sm:py-2 rounded-full font-bold text-xs sm:text-[0.85rem] text-[#fff6ee] transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lg active:translate-y-0 cursor-pointer shadow-md"
             style={{
               backgroundColor: '#46251e',
               fontFamily: "'Outfit', sans-serif",
               boxShadow: '0 4px 14px rgba(70, 37, 30, 0.28)',
             }}
           >
-            <span className="text-[#e5a93c] text-sm sm:text-base leading-none">🌙</span>
-            <span>{dreamMode === 'day' ? 'Dream Mode' : 'Cozy Day'}</span>
+            <span className="text-[#e5a93c] text-sm leading-none">🌙</span>
+            <span className="hidden sm:inline">{dreamMode === 'day' ? 'Dream Mode' : 'Cozy Day'}</span>
           </button>
 
           {/* Mobile Menu Button */}

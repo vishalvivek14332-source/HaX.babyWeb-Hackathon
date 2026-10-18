@@ -1,8 +1,29 @@
 const http = require('http');
 const fs = require('fs');
 const path = require('path');
+const crypto = require('crypto');
 
 const PORT = process.env.PORT || 8080;
+
+function hashPassword(pwd) {
+  return crypto.createHash('sha256').update(String(pwd)).digest('hex');
+}
+
+function parseJsonBody(req, callback) {
+  let body = '';
+  req.on('data', chunk => {
+    body += chunk;
+    if (body.length > 1e6) req.destroy();
+  });
+  req.on('end', () => {
+    try {
+      const data = JSON.parse(body || '{}');
+      callback(null, data);
+    } catch (e) {
+      callback(e);
+    }
+  });
+}
 
 const mimeTypes = {
   '.html': 'text/html; charset=utf-8',
@@ -26,7 +47,7 @@ const server = http.createServer((req, res) => {
   // Set CORS headers
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
-  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
 
   if (req.method === 'OPTIONS') {
     res.writeHead(204);
@@ -36,6 +57,156 @@ const server = http.createServer((req, res) => {
 
   const parsedUrl = new URL(req.url, `http://${req.headers.host || 'localhost'}`);
   const pathname = parsedUrl.pathname;
+  const usersFile = path.join(__dirname, 'users.json');
+
+  // -------------------------------------------------------------
+  // Real Backend Auth APIs: /api/auth/signup & /api/auth/login & /api/auth/me
+  // -------------------------------------------------------------
+  if (pathname === '/api/auth/signup' && req.method === 'POST') {
+    parseJsonBody(req, (err, payload) => {
+      if (err || !payload.username || !payload.password) {
+        res.writeHead(400, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify({ error: 'Username and password are required' }));
+        return;
+      }
+
+      const username = String(payload.username).trim().toLowerCase();
+      const password = String(payload.password);
+      if (username.length < 3 || password.length < 4) {
+        res.writeHead(400, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify({ error: 'Username must be >= 3 chars, password >= 4 chars' }));
+        return;
+      }
+
+      fs.readFile(usersFile, 'utf8', (readErr, data) => {
+        let users = [];
+        try {
+          users = JSON.parse(data || '[]');
+        } catch {
+          users = [];
+        }
+
+        const existing = users.find(u => u.username.toLowerCase() === username);
+        if (existing) {
+          res.writeHead(409, { 'Content-Type': 'application/json' });
+          res.end(JSON.stringify({ error: 'Username is already registered by a dreamer' }));
+          return;
+        }
+
+        const newUser = {
+          id: `user-${Date.now()}-${Math.floor(Math.random() * 1000)}`,
+          username: username,
+          passwordHash: hashPassword(password),
+          nickname: String(payload.nickname || payload.username).slice(0, 30),
+          seal: payload.seal || '⭐ Star Wish',
+          favoriteLullaby: payload.favoriteLullaby || "Pip's Sleepy Starlight Melody",
+          createdAt: new Date().toISOString()
+        };
+
+        users.push(newUser);
+        fs.writeFile(usersFile, JSON.stringify(users, null, 2), 'utf8', () => {
+          const safeUser = {
+            id: newUser.id,
+            username: newUser.username,
+            nickname: newUser.nickname,
+            seal: newUser.seal,
+            favoriteLullaby: newUser.favoriteLullaby,
+            createdAt: newUser.createdAt
+          };
+          const token = Buffer.from(JSON.stringify({ id: newUser.id, username: newUser.username })).toString('base64');
+          res.writeHead(201, { 'Content-Type': 'application/json' });
+          res.end(JSON.stringify({ success: true, user: safeUser, token }));
+        });
+      });
+    });
+    return;
+  }
+
+  if (pathname === '/api/auth/login' && req.method === 'POST') {
+    parseJsonBody(req, (err, payload) => {
+      if (err || !payload.username || !payload.password) {
+        res.writeHead(400, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify({ error: 'Username and password are required' }));
+        return;
+      }
+
+      const username = String(payload.username).trim().toLowerCase();
+      const password = String(payload.password);
+      const hashed = hashPassword(password);
+
+      fs.readFile(usersFile, 'utf8', (readErr, data) => {
+        let users = [];
+        try {
+          users = JSON.parse(data || '[]');
+        } catch {
+          users = [];
+        }
+
+        const user = users.find(u => u.username.toLowerCase() === username && u.passwordHash === hashed);
+        if (!user) {
+          res.writeHead(401, { 'Content-Type': 'application/json' });
+          res.end(JSON.stringify({ error: 'Invalid username or password' }));
+          return;
+        }
+
+        const safeUser = {
+          id: user.id,
+          username: user.username,
+          nickname: user.nickname,
+          seal: user.seal,
+          favoriteLullaby: user.favoriteLullaby,
+          createdAt: user.createdAt
+        };
+        const token = Buffer.from(JSON.stringify({ id: user.id, username: user.username })).toString('base64');
+        res.writeHead(200, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify({ success: true, user: safeUser, token }));
+      });
+    });
+    return;
+  }
+
+  if (pathname === '/api/auth/me' && req.method === 'GET') {
+    const authHeader = req.headers['authorization'] || '';
+    const token = authHeader.replace(/^Bearer\s+/i, '');
+
+    if (!token) {
+      res.writeHead(401, { 'Content-Type': 'application/json' });
+      res.end(JSON.stringify({ error: 'Unauthorized' }));
+      return;
+    }
+
+    try {
+      const decoded = JSON.parse(Buffer.from(token, 'base64').toString('utf8'));
+      fs.readFile(usersFile, 'utf8', (readErr, data) => {
+        let users = [];
+        try {
+          users = JSON.parse(data || '[]');
+        } catch {
+          users = [];
+        }
+        const user = users.find(u => u.id === decoded.id);
+        if (!user) {
+          res.writeHead(401, { 'Content-Type': 'application/json' });
+          res.end(JSON.stringify({ error: 'User not found' }));
+          return;
+        }
+        const safeUser = {
+          id: user.id,
+          username: user.username,
+          nickname: user.nickname,
+          seal: user.seal,
+          favoriteLullaby: user.favoriteLullaby,
+          createdAt: user.createdAt
+        };
+        res.writeHead(200, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify({ success: true, user: safeUser }));
+      });
+    } catch {
+      res.writeHead(401, { 'Content-Type': 'application/json' });
+      res.end(JSON.stringify({ error: 'Invalid token' }));
+    }
+    return;
+  }
 
   // Real backend API: Live Dream Guestbook (/api/wishes)
   if (pathname === '/api/wishes') {

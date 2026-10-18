@@ -1,0 +1,20 @@
+[
+  {
+    "id": "user-demo-01",
+    "username": "dreamer",
+    "passwordHash": "5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8",
+    "nickname": "Luna Starweaver",
+    "seal": "⭐ Star Wish",
+    "favoriteLullaby": "Pip's Sleepy Starlight Melody",
+    "createdAt": "2026-10-18T10:00:00.000Z"
+  },
+  {
+    "id": "user-1792323690973-154",
+    "username": "newstar",
+    "passwordHash": "9cf105071473f3428cc77fd010dba922ef6b92cdb39ffaae3c7043277010d3aa",
+    "nickname": "Star Cadet",
+    "seal": "🌙 Moon Blessing",
+    "favoriteLullaby": "Pip's Sleepy Starlight Melody",
+    "createdAt": "2026-10-18T11:41:30.973Z"
+  }
+]

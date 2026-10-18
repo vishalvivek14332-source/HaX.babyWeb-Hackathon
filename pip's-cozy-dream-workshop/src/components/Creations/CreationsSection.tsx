@@ -7,9 +7,10 @@ import { FallingDreamsGame } from './FallingDreamsGame';
 interface CreationsSectionProps {
   lullabyState: LullabyState;
   onToggleLullaby: () => void;
+  onOpenJukebox?: () => void;
 }
 
-export function CreationsSection({ lullabyState, onToggleLullaby }: CreationsSectionProps) {
+export function CreationsSection({ lullabyState, onToggleLullaby, onOpenJukebox }: CreationsSectionProps) {
   // Interactive modal states
   const [activeModal, setActiveModal] = useState<'nightlight' | 'map' | 'toys' | null>(null);
   const [nightlightGlow, setNightlightGlow] = useState(true);
@@ -102,7 +103,7 @@ export function CreationsSection({ lullabyState, onToggleLullaby }: CreationsSec
             </div>
 
             {/* Action Button */}
-            <div className="p-5 pt-0">
+            <div className="p-5 pt-0 space-y-2">
               <button
                 type="button"
                 onClick={onToggleLullaby}
@@ -118,6 +119,18 @@ export function CreationsSection({ lullabyState, onToggleLullaby }: CreationsSec
                 <span>{lullabyState.isPlaying ? 'Pause Lullaby' : 'Play a Lullaby'}</span>
                 <span>→</span>
               </button>
+
+              {onOpenJukebox && (
+                <button
+                  type="button"
+                  onClick={onOpenJukebox}
+                  className="w-full inline-flex items-center justify-center gap-1.5 py-1.5 px-3 rounded-full text-[#a34063] font-bold text-xs bg-[#fce7ed] hover:bg-[#fbcfe8] transition-all cursor-pointer border border-[#f5c6d3]"
+                  style={{ fontFamily: "'Outfit', sans-serif" }}
+                >
+                  <span>🎵</span>
+                  <span>Browse 6-Music Set</span>
+                </button>
+              )}
             </div>
           </div>
 
