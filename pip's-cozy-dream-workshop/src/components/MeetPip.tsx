@@ -152,7 +152,7 @@ export function MeetPip() {
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
           {/* Card 1: Personality */}
           <div
-            className="p-5 rounded-2xl border-2 border-[#ecd3c1] shadow-xs hover:border-[#a34063] transition-all flex flex-col justify-between"
+            className="group p-5 rounded-2xl border-2 border-[#ecd3c1] shadow-xs hover:border-[#a34063] hover:shadow-lg transition-all flex flex-col justify-between"
             style={{ backgroundColor: 'rgba(255, 248, 241, 0.94)' }}
           >
             <div>
@@ -165,6 +165,14 @@ export function MeetPip() {
                   Personality
                 </h4>
               </div>
+              <div className="rounded-xl overflow-hidden mb-2.5 h-14 border border-[#ecd3c1] shadow-xs">
+                <img
+                  src="artwork/pip_card_personality_v2.png"
+                  alt="Pip reading fairytale bedtime story with plush bunny"
+                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                  loading="eager" decoding="async"
+                />
+              </div>
               <p
                 className="text-xs sm:text-sm font-semibold text-[#5a382e] leading-relaxed"
                 style={{ fontFamily: "'Quicksand', sans-serif" }}
@@ -176,7 +184,7 @@ export function MeetPip() {
 
           {/* Card 2: Favorite Things */}
           <div
-            className="p-5 rounded-2xl border-2 border-[#ecd3c1] shadow-xs hover:border-[#a34063] transition-all flex flex-col justify-between"
+            className="group p-5 rounded-2xl border-2 border-[#ecd3c1] shadow-xs hover:border-[#a34063] hover:shadow-lg transition-all flex flex-col justify-between"
             style={{ backgroundColor: 'rgba(255, 248, 241, 0.94)' }}
           >
             <div>
@@ -189,11 +197,13 @@ export function MeetPip() {
                   Favorite Things
                 </h4>
               </div>
-              <div className="flex items-center gap-2 text-base mb-1.5 select-none">
-                <span>📚</span>
-                <span>🌙</span>
-                <span>🍯</span>
-                <span>🎵</span>
+              <div className="rounded-xl overflow-hidden mb-2.5 h-14 border border-[#ecd3c1] shadow-xs">
+                <img
+                  src="artwork/pip_card_favorites_v2.png"
+                  alt="Glowing crescent moon, star lantern, and floating starlight"
+                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                  loading="eager" decoding="async"
+                />
               </div>
               <p
                 className="text-xs sm:text-sm font-semibold text-[#5a382e] leading-relaxed"
@@ -206,7 +216,7 @@ export function MeetPip() {
 
           {/* Card 3: Where Pip Lives */}
           <div
-            className="p-5 rounded-2xl border-2 border-[#ecd3c1] shadow-xs hover:border-[#a34063] transition-all flex flex-col justify-between"
+            className="group p-5 rounded-2xl border-2 border-[#ecd3c1] shadow-xs hover:border-[#a34063] hover:shadow-lg transition-all flex flex-col justify-between"
             style={{ backgroundColor: 'rgba(255, 248, 241, 0.94)' }}
           >
             <div>
@@ -219,11 +229,11 @@ export function MeetPip() {
                   Where Pip Lives
                 </h4>
               </div>
-              <div className="rounded-xl overflow-hidden mb-2.5 h-12 border border-[#ecd3c1]">
+              <div className="rounded-xl overflow-hidden mb-2.5 h-14 border border-[#ecd3c1] shadow-xs">
                 <img
-                  src="artwork/pip_where_he_lives_v2.png"
+                  src="artwork/pip_card_where_he_lives_v2.png"
                   alt="The Midnight Nursery village in the clouds"
-                  className="w-full h-full object-cover"
+                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                   loading="eager" decoding="async"
                 />
               </div>
@@ -238,7 +248,7 @@ export function MeetPip() {
 
           {/* Card 4: Pip's Tools */}
           <div
-            className="p-5 rounded-2xl border-2 border-[#ecd3c1] shadow-xs hover:border-[#a34063] transition-all flex flex-col justify-between"
+            className="group p-5 rounded-2xl border-2 border-[#ecd3c1] shadow-xs hover:border-[#a34063] hover:shadow-lg transition-all flex flex-col justify-between"
             style={{ backgroundColor: 'rgba(255, 248, 241, 0.94)' }}
           >
             <div>
@@ -251,11 +261,11 @@ export function MeetPip() {
                   Pip's Tools
                 </h4>
               </div>
-              <div className="rounded-xl overflow-hidden mb-2.5 h-12 border border-[#ecd3c1]">
+              <div className="rounded-xl overflow-hidden mb-2.5 h-14 border border-[#ecd3c1] shadow-xs">
                 <img
-                  src="artwork/pip_tools_v2.png"
-                  alt="Music box, dream lantern, and tiny treasures"
-                  className="w-full h-full object-cover"
+                  src="artwork/pip_card_tools_v2.png"
+                  alt="Music box, dream lantern, story books, and tiny treasures"
+                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                   loading="eager" decoding="async"
                 />
               </div>
