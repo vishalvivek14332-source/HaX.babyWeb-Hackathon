@@ -17,7 +17,7 @@
 ## 🌟 Highlights & Features
 
 - **Interactive 3D Pip Model (Three.js):**
-  - Fully interactive 3D model viewer loaded from `3D.glb` (Hunyuan3D-2).
+  - Fully interactive 3D model viewer loaded from `3D.glb`.
   - 360° orbit rotation, smooth damping, zoom controls, and gentle cloud-floating animation.
   - Studio lighting with pastel rim highlights and collectible vinyl toy shading.
   - One-tap toggle between interactive 3D model and 2D storybook portrait.
